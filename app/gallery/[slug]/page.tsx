@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ArtworkDetail } from "@/components/gallery/artwork-detail";
+import { getMetadataImages } from "@/lib/media";
 import { getAdjacentArtworks, getAllArtworks, getArtwork } from "@/lib/artworks";
 
 export async function generateStaticParams() {
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${artwork.title} | Usha Kolpe`,
       description: artwork.description,
-      images: [artwork.image]
+      images: getMetadataImages(artwork.image),
     }
   };
 }

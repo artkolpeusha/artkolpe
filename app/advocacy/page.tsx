@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/ui/reveal";
+import { getMetadataImages, getSafeImageSrc } from "@/lib/media";
 import { getAdvocacyPageContent } from "@/lib/site-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
   };
 }
@@ -60,7 +61,7 @@ export default async function AdvocacyPage() {
               <Reveal key={artwork.id}>
                 <Link href={`/gallery/${artwork.slug}`} className="group block bg-white shadow-sm transition hover:bg-sky/50">
                   <div className="relative aspect-[4/5] overflow-hidden">
-                    <Image src={artwork.image} alt={`${artwork.title} artwork`} fill className="object-cover transition duration-700 group-hover:scale-105" />
+                    <Image src={getSafeImageSrc(artwork.image)} alt={`${artwork.title} artwork`} fill className="object-cover transition duration-700 group-hover:scale-105" />
                   </div>
                   <div className="bg-white p-5 text-graphite">
                     <h2 className="font-serif text-2xl">{artwork.title}</h2>

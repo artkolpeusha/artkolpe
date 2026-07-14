@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { ContactForm } from "@/components/contact/contact-form";
 import { Reveal } from "@/components/ui/reveal";
+import { getMetadataImages } from "@/lib/media";
 import { getContactPageContent, getSiteSettings } from "@/lib/site-content";
 
 const socialIcons = {
@@ -20,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
   };
 }

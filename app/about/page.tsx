@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/ui/reveal";
+import { getMetadataImages, getSafeImageSrc } from "@/lib/media";
 import { getAboutPageContent } from "@/lib/site-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
   };
 }
@@ -27,7 +28,7 @@ export default async function AboutPage() {
         <div className="museum-container grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <Reveal>
             <Image
-              src={page.hero.image}
+              src={getSafeImageSrc(page.hero.image, "/images/artist/usha-kolpe.jpeg")}
               alt={`${page.hero.title} portrait`}
               width={900}
               height={1100}
@@ -49,7 +50,7 @@ export default async function AboutPage() {
           <Reveal>
             <p className="eyebrow">{page.statementSection.eyebrow}</p>
             <Image
-              src={page.statementSection.image}
+              src={getSafeImageSrc(page.statementSection.image, "/images/artist/usha-award.jpeg")}
               alt={`${page.statementSection.eyebrow} image`}
               width={900}
               height={1100}

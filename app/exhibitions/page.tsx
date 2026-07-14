@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/ui/reveal";
+import { getMetadataImages, getSafeImageSrc } from "@/lib/media";
 import { getExhibitions, getExhibitionsPageContent } from "@/lib/site-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
   };
 }
@@ -24,7 +25,7 @@ export default async function ExhibitionsPage() {
   return (
     <main className="pt-20">
       <section className="relative min-h-[72vh] overflow-hidden py-24 text-paper">
-        <Image src={page.heroImage} alt={`${page.title} hero`} fill priority className="object-cover" />
+        <Image src={getSafeImageSrc(page.heroImage, "/images/exhibitions/global-exhibition.jpg")} alt={`${page.title} hero`} fill priority className="object-cover" />
         <div className="image-veil absolute inset-0" />
         <div className="museum-container relative z-10 pt-24">
           <Reveal>

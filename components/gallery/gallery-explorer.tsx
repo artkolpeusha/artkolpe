@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import type { Artwork } from "@/lib/artworks";
+import { getSafeImageSrc } from "@/lib/media";
 
 export function GalleryExplorer({ artworks }: { artworks: Artwork[] }) {
   const collections = useMemo(() => {
@@ -73,7 +74,7 @@ export function GalleryExplorer({ artworks }: { artworks: Artwork[] }) {
           >
             <div className="relative aspect-[4/5] overflow-hidden bg-sky/10">
               <Image
-                src={artwork.image}
+                src={getSafeImageSrc(artwork.image)}
                 alt={`${artwork.title} by Usha Kolpe`}
                 fill
                 sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"

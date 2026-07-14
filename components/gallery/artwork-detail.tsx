@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Artwork } from "@/lib/artworks";
+import { getSafeImageSrc } from "@/lib/media";
 
 export function ArtworkDetail({
   artwork,
@@ -14,7 +15,7 @@ export function ArtworkDetail({
     <article className={`grid bg-white ${modal ? "max-h-[88vh] overflow-y-auto lg:grid-cols-[1.1fr_0.9fr]" : "lg:grid-cols-2"}`}>
       <div className="relative min-h-[360px] bg-white lg:min-h-[720px]">
         <Image
-          src={artwork.image}
+          src={getSafeImageSrc(artwork.image)}
           alt={`${artwork.title} artwork by Usha Kolpe`}
           fill
           priority={modal}

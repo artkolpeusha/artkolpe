@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
+import { getMetadataImages, getSafeImageSrc } from "@/lib/media";
 import { getAwards, getExhibitions, getHomePageContent } from "@/lib/site-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,13 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
     twitter: {
       card: "summary_large_image",
       title: page.seo.title,
       description: page.seo.description,
-      images: [page.seo.image],
+      images: getMetadataImages(page.seo.image),
     },
   };
 }
@@ -76,7 +77,7 @@ export default async function Home() {
             <Reveal className="order-2 sm:order-1" delay={120}>
               <div className="art-panel relative aspect-[3/4] overflow-hidden bg-sky/10">
                 <Image
-                  src={page.hero.primaryImage}
+                  src={getSafeImageSrc(page.hero.primaryImage, "/images/artist/usha-kolpe.jpeg")}
                   alt={`${page.hero.title} portrait`}
                   fill
                   priority
@@ -88,7 +89,7 @@ export default async function Home() {
             <Reveal className="order-1 sm:order-2" delay={220}>
               <div className="art-panel relative aspect-[4/5] overflow-hidden bg-sky/10">
                 <Image
-                  src={page.hero.secondaryImage}
+                  src={getSafeImageSrc(page.hero.secondaryImage, "/images/artworks/usha-award.jpeg")}
                   alt={`${page.hero.title} featured artwork`}
                   fill
                   priority
@@ -128,7 +129,7 @@ export default async function Home() {
         <div className="museum-container grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <Image
-              src={page.aboutSection.image}
+              src={getSafeImageSrc(page.aboutSection.image, "/images/artist/usha-award.jpeg")}
               alt={`${page.aboutSection.title} section image`}
               width={900}
               height={1100}
@@ -192,7 +193,7 @@ export default async function Home() {
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-sky/10">
                     <Image
-                      src={artwork.image}
+                      src={getSafeImageSrc(artwork.image)}
                       alt={`${artwork.title} artwork`}
                       fill
                       sizes="(min-width: 1024px) 32vw, 100vw"
@@ -230,7 +231,7 @@ export default async function Home() {
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <Image
-                    src={artwork.image}
+                    src={getSafeImageSrc(artwork.image)}
                     alt={`${artwork.title} artwork`}
                     fill
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
