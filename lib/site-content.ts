@@ -562,6 +562,18 @@ function withFallback<T>(value: T | null | undefined, fallback: T): T {
   return value ?? fallback;
 }
 
+function sanitizeArtworks(
+  artworks: Array<Partial<Artwork> | null | undefined> | null | undefined,
+  fallback: Artwork[],
+): Artwork[] {
+  const normalized = (artworks ?? []).filter(
+    (artwork): artwork is Artwork =>
+      Boolean(artwork?.id && artwork.slug && artwork.title && artwork.image),
+  );
+
+  return normalized.length > 0 ? normalized : fallback;
+}
+
 const siteSettingsQuery = `*[_id == "siteSettings"][0]{
   title,
   description,
@@ -831,14 +843,12 @@ const getHomePageCached = cache(async (): Promise<HomePageContent> => {
       focusSection: {
         ...fallbackHomePage.focusSection,
         ...content.focusSection,
-        artworks: content.focusSection?.artworks?.length ? content.focusSection.artworks : focusWorks,
+        artworks: sanitizeArtworks(content.focusSection?.artworks, focusWorks),
       },
       latestArtworksSection: {
         ...fallbackHomePage.latestArtworksSection,
         ...content.latestArtworksSection,
-        artworks: content.latestArtworksSection?.artworks?.length
-          ? content.latestArtworksSection.artworks
-          : featured,
+        artworks: sanitizeArtworks(content.latestArtworksSection?.artworks, featured),
       },
       exhibitionsSection: { ...fallbackHomePage.exhibitionsSection, ...content.exhibitionsSection },
       advocacySection: { ...fallbackHomePage.advocacySection, ...content.advocacySection },
@@ -1004,9 +1014,7 @@ const getAdvocacyPageCached = cache(async (): Promise<AdvocacyPageContent> => {
       relatedWorksSection: {
         ...fallbackAdvocacyPage.relatedWorksSection,
         ...content.relatedWorksSection,
-        artworks: content.relatedWorksSection?.artworks?.length
-          ? content.relatedWorksSection.artworks
-          : relatedFallback,
+        artworks: sanitizeArtworks(content.relatedWorksSection?.artworks, relatedFallback),
       },
       seo: mergeSeo(content.seo),
     };
