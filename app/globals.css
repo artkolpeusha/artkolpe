@@ -1,0 +1,268 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter";
+  --font-serif: "Georgia";
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(31, 92, 115, 0.12), transparent 22%),
+    radial-gradient(circle at 90% 10%, rgba(31, 92, 115, 0.08), transparent 14%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%);
+  color: #1d1c1b;
+  font-synthesis: none;
+}
+
+::selection {
+  background: #1f5c73;
+  color: #ffffff;
+}
+
+a,
+button,
+input,
+textarea {
+  outline-offset: 4px;
+  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease,
+    transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.museum-container {
+  width: min(100% - 32px, 1180px);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #55514e;
+}
+
+.image-veil {
+  background:
+    linear-gradient(90deg, rgba(23, 21, 18, 0.78), rgba(23, 21, 18, 0.24) 58%, rgba(23, 21, 18, 0.1)),
+    linear-gradient(0deg, rgba(23, 21, 18, 0.62), rgba(23, 21, 18, 0) 45%);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.award-mark {
+  background:
+    linear-gradient(135deg, rgba(31, 92, 115, 0.12), rgba(31, 92, 115, 0.04)),
+    #ffffff;
+}
+
+.art-panel {
+  position: relative;
+  isolation: isolate;
+}
+
+.art-panel::before {
+  content: "";
+  position: absolute;
+  inset: 18px -18px -18px 18px;
+  z-index: -1;
+  border: 1px solid rgba(31, 92, 115, 0.12);
+  background:
+    linear-gradient(135deg, rgba(31, 92, 115, 0.16), transparent 42%),
+    linear-gradient(315deg, rgba(31, 92, 115, 0.14), transparent 48%);
+}
+
+.hero-field {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 14%, rgba(31, 92, 115, 0.16), transparent 18%),
+    radial-gradient(circle at 88% 20%, rgba(31, 92, 115, 0.08), transparent 16%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.98), rgba(236, 243, 243, 0.96)),
+    linear-gradient(90deg, rgba(31, 92, 115, 0.06), transparent 34%, rgba(31, 92, 115, 0.08));
+}
+
+.hero-field::before {
+  content: "";
+  position: absolute;
+  left: -8%;
+  top: 18%;
+  width: 42%;
+  height: 42%;
+  background: radial-gradient(circle, rgba(31, 92, 115, 0.18), transparent 58%);
+  filter: blur(32px);
+  pointer-events: none;
+}
+
+.hero-field::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 10px;
+  background: linear-gradient(90deg, #cbe6f0, #d5e6ee 28%, #eef6f9 58%, #1f5c73);
+}
+
+.paint-ribbon {
+  background:
+    linear-gradient(90deg, #1f5c73 0 18%, #f8fbfc 18% 36%, #eef6f9 36% 42%, #1f5c73 42% 68%, #1f5c73 68% 100%);
+}
+
+.editorial-band {
+  background:
+    linear-gradient(135deg, rgba(31, 92, 115, 0.09), transparent 36%),
+    linear-gradient(315deg, rgba(31, 92, 115, 0.06), transparent 38%),
+    #fdfdfd;
+}
+
+.purpose-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    background-color 0.28s ease;
+}
+
+.purpose-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: linear-gradient(#1f5c73, #d5e6ee);
+}
+
+.purpose-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(31, 92, 115, 0.32);
+  background: #ffffff;
+}
+
+.artwork-card {
+  transition:
+    transform 0.32s ease,
+    box-shadow 0.32s ease,
+    border-color 0.32s ease;
+}
+
+.artwork-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 90px rgba(23, 21, 18, 0.16);
+  border-color: rgba(36, 95, 115, 0.12);
+}
+
+.exhibition-tile {
+  background:
+    linear-gradient(90deg, rgba(31, 92, 115, 0.06), transparent 46%),
+    #ffffff;
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.exhibition-tile:hover {
+  transform: translateX(4px);
+  border-color: rgba(120, 63, 85, 0.38);
+  box-shadow: 0 18px 45px rgba(23, 21, 18, 0.08);
+}
+
+.exhibition-tile:hover {
+  transform: translateX(5px);
+  border-color: rgba(120, 63, 85, 0.38);
+}
+
+.quote-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 45%),
+    linear-gradient(90deg, rgba(33, 31, 28, 0.08), transparent),
+    #1f5c73;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*, .font-sans, .font-serif {
+       font-family: "Inter", sans-serif !important;
+}
+
+.museum-container article > div > img {
+width: auto !important;
+    object-fit: unset !important;
+    margin: 0 auto !important;
+}
+
+.gallery-detailed-item article {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gallery-detailed-item article > div.relative {
+    height: auto;
+    max-height: 2000px;
+    contain: content;
+}
+.artwork-card h2.font-serif.text-2xl {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 500;
+}
+
+.artwork-card h2.font-serif.text-2xl, .artwork-card h2.font-serif.text-2xl + p {
+    margin: 0 -12px;
+}
+.museum-container .mt-12.grid.gap-7.md\:grid-cols-2.xl\:grid-cols-3 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+section.bg-ocean.py-24.text-paper .eyebrow, .quote-panel .eyebrow {
+    color: #fff;
+}
+.display-none{
+  display: none;
+}
+a.logo-link {
+    line-height: 70px;
+}
+.logo-image {
+    width: auto !important;
+    position: relative !important;
+    max-height: 70px;
+    float: left;
+    margin-right: 12px;
+}
+.museum-container button.relative.min-h-11.rounded-full {
+    padding: 4px 11px;
+    line-height: 20px;
+    min-height: 20px;
+}
