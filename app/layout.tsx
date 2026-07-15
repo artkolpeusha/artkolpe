@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { getMetadataImages } from "@/lib/media";
 import { getSiteSettings } from "@/lib/site-content";
 
 const inter = Inter({
@@ -20,22 +21,23 @@ const cormorant = Cormorant_Garamond({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    metadataBase: new URL(siteUrl),
     title: settings.seo.title || settings.title,
     description: settings.seo.description || settings.description,
     openGraph: {
       title: settings.seo.title || settings.title,
       description: settings.seo.description || settings.description,
       type: "website",
-      images: [settings.seo.image]
+      images: getMetadataImages(settings.seo.image)
     },
     twitter: {
       card: "summary_large_image",
       title: settings.seo.title || settings.title,
       description: settings.seo.description || settings.description,
-      images: [settings.seo.image]
+      images: getMetadataImages(settings.seo.image)
     }
   };
 }
