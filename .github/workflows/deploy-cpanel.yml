@@ -48,16 +48,22 @@ jobs:
           CPANEL_SSH_PORT: ${{ secrets.CPANEL_SSH_PORT }}
           CPANEL_SSH_USERNAME: ${{ secrets.CPANEL_SSH_USERNAME }}
           CPANEL_SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
+          CPANEL_SSH_PRIVATE_KEY_B64: ${{ secrets.CPANEL_SSH_PRIVATE_KEY_B64 }}
           CPANEL_DEPLOY_PATH: ${{ secrets.CPANEL_DEPLOY_PATH }}
         run: |
           missing=0
 
-          for name in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_SANITY_PROJECT_ID NEXT_PUBLIC_SANITY_DATASET NEXT_PUBLIC_SANITY_API_VERSION SANITY_API_TOKEN CPANEL_SSH_HOST CPANEL_SSH_PORT CPANEL_SSH_USERNAME CPANEL_SSH_PRIVATE_KEY CPANEL_DEPLOY_PATH; do
+          for name in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_SANITY_PROJECT_ID NEXT_PUBLIC_SANITY_DATASET NEXT_PUBLIC_SANITY_API_VERSION SANITY_API_TOKEN CPANEL_SSH_HOST CPANEL_SSH_PORT CPANEL_SSH_USERNAME CPANEL_DEPLOY_PATH; do
             if [ -z "${!name}" ]; then
               echo "::error::$name is missing"
               missing=1
             fi
           done
+
+          if [ -z "$CPANEL_SSH_PRIVATE_KEY" ] && [ -z "$CPANEL_SSH_PRIVATE_KEY_B64" ]; then
+            echo "::error::Either CPANEL_SSH_PRIVATE_KEY or CPANEL_SSH_PRIVATE_KEY_B64 must be set"
+            missing=1
+          fi
 
           if [ "$missing" -ne 0 ]; then
             exit 1
@@ -66,12 +72,15 @@ jobs:
       - name: Configure SSH key
         env:
           CPANEL_SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
+          CPANEL_SSH_PRIVATE_KEY_B64: ${{ secrets.CPANEL_SSH_PRIVATE_KEY_B64 }}
           CPANEL_SSH_HOST: ${{ secrets.CPANEL_SSH_HOST }}
           CPANEL_SSH_PORT: ${{ secrets.CPANEL_SSH_PORT }}
         run: |
           mkdir -p ~/.ssh
 
-          if printf '%s' "$CPANEL_SSH_PRIVATE_KEY" | grep -q '\\n'; then
+          if [ -n "$CPANEL_SSH_PRIVATE_KEY_B64" ]; then
+            printf '%s' "$CPANEL_SSH_PRIVATE_KEY_B64" | base64 -d | tr -d '\r' > ~/.ssh/deploy_key
+          elif printf '%s' "$CPANEL_SSH_PRIVATE_KEY" | grep -q '\\n'; then
             printf '%b' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           else
             printf '%s\n' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
