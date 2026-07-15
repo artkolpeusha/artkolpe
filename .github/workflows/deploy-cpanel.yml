@@ -70,8 +70,20 @@ jobs:
           CPANEL_SSH_PORT: ${{ secrets.CPANEL_SSH_PORT }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+
+          if printf '%s' "$CPANEL_SSH_PRIVATE_KEY" | grep -q '\\n'; then
+            printf '%b' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          else
+            printf '%s\n' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          fi
+
           chmod 600 ~/.ssh/deploy_key
+
+          if ! grep -Eq '^-----BEGIN (OPENSSH|RSA|EC) PRIVATE KEY-----$' ~/.ssh/deploy_key; then
+            echo "::error::CPANEL_SSH_PRIVATE_KEY is not a valid PEM/OpenSSH private key format."
+            exit 1
+          fi
+
           ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
           ssh-keyscan -T 10 -p "$CPANEL_SSH_PORT" "$CPANEL_SSH_HOST" >> ~/.ssh/known_hosts
 
