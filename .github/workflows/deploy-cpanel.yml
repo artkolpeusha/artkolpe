@@ -70,8 +70,9 @@ jobs:
           CPANEL_SSH_PORT: ${{ secrets.CPANEL_SSH_PORT }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$CPANEL_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
           ssh-keyscan -T 10 -p "$CPANEL_SSH_PORT" "$CPANEL_SSH_HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy out directory to cPanel
@@ -82,5 +83,5 @@ jobs:
           CPANEL_DEPLOY_PATH: ${{ secrets.CPANEL_DEPLOY_PATH }}
         run: |
           rsync -avz --delete --omit-dir-times --no-perms --no-owner --no-group \
-            -e "ssh -p $CPANEL_SSH_PORT" \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o PreferredAuthentications=publickey -p $CPANEL_SSH_PORT" \
             out/ "$CPANEL_SSH_USERNAME@$CPANEL_SSH_HOST:$CPANEL_DEPLOY_PATH/"
