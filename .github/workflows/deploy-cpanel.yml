@@ -103,6 +103,16 @@ jobs:
           CPANEL_SSH_USERNAME: ${{ secrets.CPANEL_SSH_USERNAME }}
           CPANEL_DEPLOY_PATH: ${{ secrets.CPANEL_DEPLOY_PATH }}
         run: |
+          CPANEL_SSH_HOST="$(printf '%s' "$CPANEL_SSH_HOST" | tr -d '\r' | xargs)"
+          CPANEL_SSH_PORT="$(printf '%s' "$CPANEL_SSH_PORT" | tr -d '\r' | xargs)"
+          CPANEL_SSH_USERNAME="$(printf '%s' "$CPANEL_SSH_USERNAME" | tr -d '\r' | xargs)"
+          CPANEL_DEPLOY_PATH="$(printf '%s' "$CPANEL_DEPLOY_PATH" | tr -d '\r')"
+
+          if printf '%s' "$CPANEL_SSH_HOST" | grep -Eq '^(ssh://|https?://)'; then
+            echo "::error::CPANEL_SSH_HOST must be only a hostname or IP address, without http://, https://, or ssh://"
+            exit 1
+          fi
+
           rsync -avz --delete --omit-dir-times --no-perms --no-owner --no-group \
             -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o PreferredAuthentications=publickey -p $CPANEL_SSH_PORT" \
             out/ "$CPANEL_SSH_USERNAME@$CPANEL_SSH_HOST:$CPANEL_DEPLOY_PATH/"
