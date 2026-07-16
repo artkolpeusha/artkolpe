@@ -15,7 +15,7 @@ import { structure } from "./sanity/deskStructure";
 
 export default defineConfig({
   basePath: "/admin",
-  projectId: projectId || "missing-project-id",
+  projectId: projectId || "wbvlv3m9s",
   dataset: dataset || "production",
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
