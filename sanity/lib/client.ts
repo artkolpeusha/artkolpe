@@ -8,6 +8,7 @@ export const client = createClient({
   projectId: projectId || "missing-project-id",
   dataset: dataset || "production",
   apiVersion,
-  useCdn: true,
+  // The site is rebuilt on publish, so freshness matters more than CDN caching here.
+  useCdn: false,
   perspective: "published",
 });
