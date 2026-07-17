@@ -53,6 +53,19 @@ function normalizeArtwork(artwork: Partial<Artwork>): Artwork | null {
   };
 }
 
+function mergeArtworks(fallbackItems: Artwork[], sanityItems: Artwork[]): Artwork[] {
+  if (sanityItems.length === 0) {
+    return fallbackItems;
+  }
+
+  const sanityBySlug = new Map(sanityItems.map((artwork) => [artwork.slug, artwork]));
+  const mergedFallback = fallbackItems.map((artwork) => sanityBySlug.get(artwork.slug) || artwork);
+  const fallbackSlugs = new Set(fallbackItems.map((artwork) => artwork.slug));
+  const newSanityItems = sanityItems.filter((artwork) => !fallbackSlugs.has(artwork.slug));
+
+  return [...mergedFallback, ...newSanityItems];
+}
+
 const fetchArtworks = cache(async (): Promise<Artwork[]> => {
   if (!isSanityConfigured) {
     return fallbackArtworks;
@@ -64,7 +77,7 @@ const fetchArtworks = cache(async (): Promise<Artwork[]> => {
       .map(normalizeArtwork)
       .filter((artwork): artwork is Artwork => artwork !== null);
 
-    return normalized.length > 0 ? normalized : fallbackArtworks;
+    return mergeArtworks(fallbackArtworks, normalized);
   } catch (error) {
     console.warn("Falling back to local artwork data because the Sanity fetch failed.", error);
     return fallbackArtworks;
